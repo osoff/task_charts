@@ -85,7 +85,7 @@ const CustomTooltip = ({ active, payload, label }) => {
         {payload.map((pld) => (
           <div key={pld.dataKey} className="flex gap-2 items-center">
             <p style={{ color: pld.fill }}>{pld.dataKey}</p>
-            <p style={{ color: pld.fill }}>{pld.value}</p>
+            <p style={{ color: pld.fill }}>{pld.value.toFixed(4)}</p>
           </div>
         ))}
       </div>

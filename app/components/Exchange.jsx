@@ -35,7 +35,7 @@ function Exchange() {
   }, [date]);
 
   return (
-    <Card className="flex flex-col-reverse md:flex-row md:items-center md:justify-around  w-full p-6 gap-9 opacity-90 backdrop-blur-lg">
+    <Card className="flex flex-col-reverse md:flex-row md:items-center md:justify-around shadow-2xl w-full p-6 gap-9 opacity-90 backdrop-blur-lg">
       <div className="flex flex-col gap-9 items-center md:items-start md:justify-between">
         <div className="flex md:flex-col gap-9 ">
           {currencies.map((currency) => (

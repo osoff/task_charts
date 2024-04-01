@@ -57,10 +57,12 @@
     @apply bg-background text-foreground;
   }
 }
-.heroGrad {
-  background: rgb(6, 138, 221);
-  background: radial-gradient(
-    rgba(6, 138, 221, 0.8) 0%,
-    rgba(255, 255, 255, 0) 65%
-  );
+@layer components {
+  .heroGrad {
+    background: rgb(6, 138, 221);
+    background: radial-gradient(
+      rgba(6, 138, 221, 0.8) 0%,
+      rgba(255, 255, 255, 0) 65%
+    );
+  }
 }
