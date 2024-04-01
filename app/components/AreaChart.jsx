@@ -56,6 +56,13 @@ function AreaChartUI({ dataSet, activeLine }) {
         Выберите валюту
       </div>
     );
+
+  if (!dataSet?.length)
+    return (
+      <div className=" w-full h-full flex justify-center items-center text-xl">
+        Нет данных
+      </div>
+    );
   return (
     <ResponsiveContainer width="100%" height="100%">
       <LineChart data={dataSet}>

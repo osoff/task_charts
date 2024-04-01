@@ -8,17 +8,21 @@ import AreaChartUI from "./AreaChart";
 import { getData } from "../services/getData";
 import { currencies } from "../constants";
 import { addDays } from "date-fns";
+import { useCurrency } from "../hooks/useCurrenc";
+import { Loader2 } from "lucide-react";
+
+const INIT_DAY = 7;
 
 function Exchange() {
   const [curr, setCurr] = useState({ eur: false, usd: false, cny: false });
-
-  const [chartsData, setChartsData] = useState();
-
   const [date, setDate] = useState({
-    from: addDays(new Date(), -7),
+    from: addDays(new Date(), -INIT_DAY),
     to: new Date(),
   });
 
+  const [requestCount, setRequestCount] = useState(INIT_DAY + 1);
+
+  const { dataset, isPending } = useCurrency(date);
   const handleCheckboxChange = (key) => {
     setCurr((prevCurr) => ({
       ...prevCurr,
@@ -27,12 +31,15 @@ function Exchange() {
   };
 
   useEffect(() => {
-    const fetchData = async function () {
-      const currenc = await getData(date);
-      setChartsData(currenc);
+    const originalFetch = window.fetch;
+    window.fetch = function (...args) {
+      setRequestCount((prevCount) => prevCount + 1);
+      return originalFetch.apply(this, args);
     };
-    fetchData();
-  }, [date]);
+    return () => {
+      window.fetch = originalFetch;
+    };
+  }, []);
 
   return (
     <Card className="flex flex-col-reverse md:flex-row md:items-center md:justify-around shadow-2xl w-full p-6 gap-9 opacity-90 backdrop-blur-lg">
@@ -62,11 +69,18 @@ function Exchange() {
           </div>
         </div>
         <div className="w-full text-left opacity-50">
-          <p>Число запросов к API - X</p>
+          <p>Число запросов к API - {requestCount}</p>
         </div>
       </div>
       <div className=" w-full  h-[250px] md:h-[400px] lg:w-[500px] lg:h-[500px]">
-        <AreaChartUI dataSet={chartsData} activeLine={curr} />
+        {isPending ? (
+          <div className=" w-full h-full flex justify-center items-center text-xl">
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Загрузка...
+          </div>
+        ) : (
+          <AreaChartUI dataSet={dataset} activeLine={curr} />
+        )}
       </div>
     </Card>
   );
